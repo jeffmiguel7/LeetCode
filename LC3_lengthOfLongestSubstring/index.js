@@ -6,19 +6,21 @@
 
 function lengthOfLongestSubstring(s) {
   let windowCharsMap = {};
-  let windowStart = 0;
-  let maxLength = 0;
+  let windowStart = (temp = maxLength = 0);
 
   for (let i = 0; i < s.length; i++) {
-    const endChar = s[i];
-
-    if (windowCharsMap[endChar] >= windowStart) {
-      windowStart = windowCharsMap[endChar] + 1;
+    let curr = s[i];
+    if (curr in windowCharsMap && windowCharsMap[curr] >= windowStart) {
+      windowStart = windowCharsMap[curr] + 1;
+      windowCharsMap[curr] = i;
+    } else {
+      windowCharsMap[curr] = i;
     }
-
-    windowCharsMap[endChar] = i;
-    maxLength = Math.max(maxLength, i - windowStart + 1);
+    temp = i - windowStart + 1;
+    maxLength = temp > maxLength ? temp : maxLength;
   }
+
+  return maxLength;
 }
 
-lengthOfLongestSubstring("abba");
+module.exports = lengthOfLongestSubstring;
